@@ -16,7 +16,7 @@ from pynput import keyboard
 import time
 import threading
 
-from test2 import MyClass as mc
+from test2 import MyClass
 
 x=662
 y=360
@@ -111,15 +111,20 @@ def main():
         ans = int(input( banner))
         #ans=3
         if ans == 1:
-            mc.pre_execute()
+            mc=MyClass()
+            model=mc.pre_execute()
             while True:
                 with mss.mss() as sct:
                     #sct.shot(mon)
                     img = np.asarray(sct.grab(mon))
+                    time.sleep(0.15)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                     cv2.imshow("sdsd", img)
-                    pp=mc.mypredict(img)
-                    if(pp==[0]):
+                    #cv2.imwrite("F:\\SupervisedChromeTrex\\keras practise\\temp.PNG",img)
+                    pp=mc.mypredict(model,img)
+                    if(pp==[1]):
                         print("jump")
+                        pyautogui.press("up")
                     else:
                         print("nojump")
                     if cv2.waitKey(25) & 0xFF == ord('q'):
